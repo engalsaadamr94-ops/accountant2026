@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── رموز التصميم: دفتر محاسبي — حبر أخضر على ورق بارد ── */
+:root {
+  --font-body: "IBM Plex Sans Arabic";
+  --font-display: "Noto Kufi Arabic";
+  --paper: 246 248 247;      /* خلفية الصفحة */
+  --sheet: 255 255 255;      /* سطح الجداول والنماذج */
+  --ink: 22 33 30;           /* النص الأساسي */
+  --ink-soft: 61 77 72;
+  --muted: 112 127 122;
+  --rule: 221 228 225;       /* خطوط التسطير */
+  --rule-strong: 182 196 190;
+  --brand: 14 77 69;         /* الحبر الأخضر */
+  --brand-deep: 9 52 47;
+  --brand-tint: 228 240 236;
+  --amber: 183 121 31;
+  --amber-tint: 251 242 224;
+  --loss: 180 55 43;
+  --loss-tint: 250 232 229;
+  --gain: 26 112 74;
+  --chart-in: #0B8A6A;
+  --chart-out: #B9771A;
+  --chart-grid: #E3E9E6;
+  color-scheme: light;
+}
+
+.dark {
+  --paper: 14 21 19;
+  --sheet: 20 29 27;
+  --ink: 228 236 233;
+  --ink-soft: 190 203 198;
+  --muted: 135 152 146;
+  --rule: 39 52 48;
+  --rule-strong: 64 82 76;
+  --brand: 86 178 158;
+  --brand-deep: 9 40 36;
+  --brand-tint: 24 48 43;
+  --amber: 226 170 82;
+  --amber-tint: 51 40 20;
+  --loss: 236 120 104;
+  --loss-tint: 58 28 25;
+  --gain: 104 196 150;
+  --chart-in: #1FA585;
+  --chart-out: #C4862A;
+  --chart-grid: #26332F;
+  color-scheme: dark;
+}
+
+html, body { background: rgb(var(--paper)); color: rgb(var(--ink)); }
+body { font-family: var(--font-body), system-ui, sans-serif; font-size: 15px; line-height: 1.6; }
+
+h1, h2, h3 { font-family: var(--font-display), var(--font-body), sans-serif; line-height: 1.35; }
+
+/* الأرقام دائماً جدولية متحاذية */
+.tnum { font-variant-numeric: tabular-nums lining-nums; }
+.num { font-variant-numeric: tabular-nums lining-nums; font-feature-settings: "tnum" 1, "lnum" 1; direction: ltr; unicode-bidi: isolate; display: inline-block; }
+
+:focus-visible { outline: 2px solid rgb(var(--brand)); outline-offset: 2px; border-radius: 4px; }
+
+@layer components {
+  .field {
+    @apply w-full rounded-field border border-rule-strong bg-sheet px-3 py-2 text-[15px] text-ink placeholder:text-muted/80
+           focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 disabled:opacity-60;
+  }
+  .label { @apply mb-1 block text-[13px] font-medium text-ink-soft; }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-field px-4 py-2 text-[14px] font-medium transition-colors
+           disabled:cursor-not-allowed disabled:opacity-50 whitespace-nowrap;
+  }
+  .btn-primary { @apply btn bg-brand text-white hover:bg-brand-deep dark:text-brand-deep dark:hover:bg-brand/85; }
+  .btn-ghost { @apply btn border border-rule-strong bg-sheet text-ink hover:bg-brand-tint; }
+  .btn-quiet { @apply btn text-ink-soft hover:bg-brand-tint hover:text-ink; }
+  .btn-danger { @apply btn border border-loss/40 text-loss hover:bg-loss-tint; }
+
+  /* جدول الدفتر: أسطر أفقية رفيعة، رأس بخط سفلي أقوى */
+  .ledger { @apply w-full border-collapse text-[14px]; }
+  .ledger thead th { @apply border-b-2 border-rule-strong bg-sheet px-3 py-2 text-right text-[12.5px] font-semibold text-ink-soft; }
+  .ledger tbody td { @apply border-b border-rule px-3 py-2 align-top; }
+  .ledger tbody tr:hover td { @apply bg-brand-tint/40; }
+  .ledger td.amt, .ledger th.amt { @apply text-left whitespace-nowrap; }
+  /* اصطلاح المحاسب للإجمالي: خط مفرد فوقه وخط مزدوج تحته */
+  .ledger tfoot td { @apply px-3 py-2.5 font-semibold; }
+  .ledger tfoot td.amt { @apply text-left; }
+  .total-rule { border-top: 1px solid rgb(var(--ink) / .7); border-bottom: 3px double rgb(var(--ink) / .7); }
+
+  .panel { @apply rounded-panel border border-rule bg-sheet; }
+  .chip { @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-medium; }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; font-size: 12px; }
+  .print-sheet { border: none !important; box-shadow: none !important; }
+  .ledger thead { display: table-header-group; }
+  .ledger tr { break-inside: avoid; }
+  @page { size: A4; margin: 12mm; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
